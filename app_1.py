@@ -1,8 +1,10 @@
 import streamlit as st
 import timeit
 import os
+import base64           # to read the pdf
+import yaml
 
-from base import setup_qa_chain, run_ingest
+from base import setup_qa_chain, run_ingest, load_config
 
 
 def main():
@@ -13,7 +15,40 @@ def main():
     with st.sidebar:
         st.title("Settings")
         st.markdown('---')
-        
+        # Configuration File Generator
+        st.title("Configuration File Generator")
+
+        # Define options for parameters
+        options = {
+            "RETURN_SOURCE_DOCUMENTS": [True, False],
+            "VECTOR_COUNT": [1, 2, 3],
+            "CHUNK_SIZE": list(range(50, 1001)),  # Extend chunk size range from 50 to 1000
+            "CHUNK_OVERLAP": list(range(0, 51)),   # Extend chunk overlap range from 0 to 50
+            "DB_FAISS_PATH": "db_faiss/",
+            "DATA_PATH": "data/",
+            "MODEL_TYPE": ["llama", "mistral"],
+            "MODEL_BIN_PATH": ['models/llama-2-7b-chat.ggmlv3.q8_0.bin', "models/Mistral-7B-Instruct-v0.1-GGUF/tree/main", "models/Mistral-7B-Instruct-v0.2-GGUF/tree/main"],
+            "EMBEDDINGS": [ "sentence-transformers/all-MiniLM-L6-v2", "sentence-transformers/all-mpnet-base-v2"],
+            "MAX_NEW_TOKENS": [512, 1024, 2048],
+            "TEMPERATURE": [round(i * 0.01, 2) for i in range(0, 101)]  # Extend temperature range from 0.00 to 1.00
+        }
+
+        # Initialize an empty dictionary to store selected parameters
+        config = {}
+
+        # Generate UI for each parameter
+        for key, value in options.items():
+            if isinstance(value, list):
+                config[key] = st.selectbox(f"{key}:", value)
+            else:
+                config[key] = st.text_input(f"{key}:", value)
+
+        # Save the configuration to a YAML file
+        if st.button("Save Configuration"):
+            with open("config.yml", "w") as f:
+                yaml.dump(config, f)
+            st.success("Configuration saved successfully!")    
+                
         # Sidebar for uploading PDF documents and running data ingestion
         st.sidebar.title("Upload PDF Documents and Run Data Ingestion")
         uploaded_files = st.sidebar.file_uploader("Upload your PDF documents here", type=['pdf'], accept_multiple_files=True)
@@ -22,8 +57,9 @@ def main():
         if uploaded_files:
             # Loop through the uploaded files
             for uploaded_file in uploaded_files:
+                cfg = load_config('config.yml')
                 # Save each file to the "data" folder
-                filepath = os.path.join("data", uploaded_file.name)
+                filepath = os.path.join(cfg.DATA_PATH, uploaded_file.name)
                 with open(filepath, "wb") as f:
                     f.write(uploaded_file.getbuffer())
                 st.sidebar.success(f"{uploaded_file.name} uploaded successfully!")
@@ -66,7 +102,8 @@ def main():
             
             # Option to delete all uploaded files after chat
             if st.button("Delete Uploaded Files"):
-                folder = 'data'
+                cfg = load_config('config.yml')
+                folder = cfg.DATA_PATH
                 for filename in os.listdir(folder):
                     file_path = os.path.join(folder, filename)
                     try:
