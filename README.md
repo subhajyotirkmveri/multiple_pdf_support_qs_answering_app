@@ -27,6 +27,10 @@ https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main
 streamlit run app_1.py
 ```
 ## Application Preview :
-
+- Save the configuration file.
+- Upload PDFs from the source.
+- Click the process button to ingest the data.
+- You can continue to ask questions.
+- 
 ![image](https://github.com/subhajyotirkmveri/multiple_pdf_support_qs_answering_app/blob/main/asset/asset_3.jpeg)
 ![image](https://github.com/subhajyotirkmveri/multiple_pdf_support_qs_answering_app/blob/main/asset/asset_4.jpeg)
