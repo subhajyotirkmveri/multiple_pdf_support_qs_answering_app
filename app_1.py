@@ -67,7 +67,17 @@ def main():
             # Run data ingestion
                 run_ingest()
                 st.sidebar.success("Process Done")
-
+    # delete uploaded files
+    if st.sidebar.button("Delete All Uploaded Files"):
+        cfg = load_config('config.yml')
+        folder = cfg.DATA_PATH
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                st.sidebar.error(f"Error: {e}")
 
     # Previous messages display
     if "messages" not in st.session_state:
@@ -100,19 +110,6 @@ def main():
             st.session_state.messages.append({"role": "user", "content": query})
             st.session_state.messages.append({"role": "assistant", "content": response["result"]})
             
-            # Option to delete all uploaded files after chat
-            if st.button("Delete Uploaded Files"):
-                cfg = load_config('config.yml')
-                folder = cfg.DATA_PATH
-                for filename in os.listdir(folder):
-                    file_path = os.path.join(folder, filename)
-                    try:
-                        if os.path.isfile(file_path):
-                            os.unlink(file_path)
-                    except Exception as e:
-                        st.error(f"Error: {e}")
-
-
 if __name__ == "__main__":
     main()
 
