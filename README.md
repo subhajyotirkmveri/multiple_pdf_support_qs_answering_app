@@ -31,5 +31,10 @@ streamlit run app_1.py
 - Upload PDFs from the source.
 - Click the process button to ingest the data.
 - You can continue to ask questions.
-  
-![image](https://github.com/subhajyotirkmveri/multiple_pdf_support_qs_answering_app/blob/main/asset/asset_3.jpeg)
+
+![image](https://github.com/subhajyotirkmveri/multiple_pdf_support_qs_answering_app/blob/main/asset/asset_11.jpeg)
+![image](https://github.com/subhajyotirkmveri/multiple_pdf_support_qs_answering_app/blob/main/asset/asset_12.jpeg)
+![image](https://github.com/subhajyotirkmveri/multiple_pdf_support_qs_answering_app/blob/main/asset/asset_13.jpeg)  
+![image](https://github.com/subhajyotirkmveri/multiple_pdf_support_qs_answering_app/blob/main/asset/asset_14.jpeg)
+
+![image](https://github.com/subhajyotirkmveri/multiple_pdf_support_qs_answering_app/blob/main/asset/asset_15.jpeg)
